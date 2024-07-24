@@ -1,6 +1,6 @@
 ﻿$(document).ready(function() {
     let nSquares = 64;
-    let colourNodesEndpoint = '/KubernetesLoadBalancer';
+    let colourNodesEndpoint = 'http://localhost:8080/';
 
     function parseSquareColour(colourText) {
         if (colourText && (colourText === "green" || colourText === "blue")) {

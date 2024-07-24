@@ -9,3 +9,10 @@ services:
       - "80:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      
+  node:
+    build:
+      context: .
+      dockerfile: ./Node/Dockerfile
+    ports:
+      - "8080:8080"
