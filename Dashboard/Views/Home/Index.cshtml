@@ -1,7 +1,20 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
+    int nSquares = 64;
 }
 
 <div class="text-center">
     <h1 class="display-4">Dashboard of Kubernetes Pods</h1>
 </div>
+
+<div class="container">
+    <div class="row">
+        @for (int i = 0; i < nSquares; i++)
+        {
+            <div class="col-sm-1 mb-3">
+                <div id="square-@i" class="bg-success square"></div>
+            </div>
+        }
+    </div>
+</div>
+
