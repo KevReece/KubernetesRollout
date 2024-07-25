@@ -1,12 +1,15 @@
 ﻿$(document).ready(function() {
     let nSquares = 64;
     let colourNodesEndpoint = 'http://localhost:8080/';
+    let pendingResponseColour = 'black'
 
     function parseSquareColour(colourText) {
-        if (colourText && (colourText === "green" || colourText === "blue")) {
+        let responseColours = ['green', 'blue'];
+        if (colourText && (responseColours.includes(colourText) || colourText === pendingResponseColour)) {
             return colourText;
         }
-        return 'red';
+        let failureColour = 'red';
+        return failureColour;
     }
 
     function setSquareColour(index, colourText=null) {
@@ -15,13 +18,15 @@
     }
 
     function scheduleNextUpdate(index) {
+        let timeout = 1000 + Math.floor(Math.random() * 1000);
         setTimeout(function() {
             updateSquare(index);
-        }, 1000);
+        }, timeout);
     }
 
     function updateSquare(index) {
-        $.get(colourNodesEndpoint)
+        setSquareColour(index, pendingResponseColour);
+        return $.get(colourNodesEndpoint)
             .done(function(response) {
                 console.log('square' + index + ', response=' + response);
                 setSquareColour(index, response);
@@ -34,12 +39,12 @@
                 scheduleNextUpdate(index);
             });
     }
-
+    
     function startSquareUpdates() {
         for (let index = 0; index < nSquares; index++) {
-            updateSquare(index);
+            scheduleNextUpdate(index);
         }
     }
-
+    
     startSquareUpdates();
 });

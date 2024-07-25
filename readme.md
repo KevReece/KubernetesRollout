@@ -21,7 +21,6 @@ For local:
 Todo
 ===
 
-1. local single colour node, and dashboard usage
 1. colour node into kubernetes, and dashboard usage
 1. multiple load balanced colour nodes, and dashboard usage
 1. docker compose kubernetes setup
