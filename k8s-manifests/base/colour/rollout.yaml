@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: node
+  name: colour
 spec:
   replicas: 5
   strategy:
@@ -18,13 +18,12 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: node
+      app: colour
   template:
     metadata:
       labels:
-        app: node
+        app: colour
     spec:
       containers:
-      - name: dashboard
-        image: kubernetesrollout_node:blue
-        imagePullPolicy: Never
+      - name: colour
+        image: kevreece/colour:blue

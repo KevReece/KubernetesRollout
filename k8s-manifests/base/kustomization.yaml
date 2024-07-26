@@ -5,5 +5,5 @@ resources:
 - argocd
 - dashboard/service.yaml
 - dashboard/deployment.yaml
-- node/service.yaml
-- node/rollout.yaml
+- colour/service.yaml
+- colour/rollout.yaml

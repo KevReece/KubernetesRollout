@@ -14,5 +14,4 @@ spec:
     spec:
       containers:
       - name: dashboard
-        image: kubernetesrollout_dashboard:v1
-        imagePullPolicy: Never
+        image: kevreece/rolloutdashboard:v1.0.0
