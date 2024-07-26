@@ -4,9 +4,9 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["./Dashboard/Dashboard.csproj", "./"]
+COPY ["./Dashboard.csproj", "./"]
 RUN dotnet restore "./Dashboard.csproj"
-COPY ./Dashboard/ .
+COPY . .
 WORKDIR "/src/."
 RUN dotnet build "Dashboard.csproj" -c Release -o /app/build
 

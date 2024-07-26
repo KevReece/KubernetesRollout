@@ -1,6 +1,6 @@
 ﻿$(document).ready(function() {
     let nSquares = 64;
-    let colourNodesEndpoint = 'http://localhost:8080/';
+    let colourNodesEndpoint = 'http://localhost:49264';
     let pendingResponseColour = 'black'
 
     function parseSquareColour(colourText) {
@@ -26,18 +26,21 @@
 
     function updateSquare(index) {
         setSquareColour(index, pendingResponseColour);
-        return $.get(colourNodesEndpoint)
-            .done(function(response) {
+        return $.ajax({
+            url: colourNodesEndpoint, 
+            cache: false, 
+            success: function(response) {
                 console.log('square' + index + ', response=' + response);
                 setSquareColour(index, response);
-            })
-            .fail(function() {
-                console.log('square' + index + ', fail');
+            },
+            error: function() {
+                console.log('square' + index + ', error');
                 setSquareColour(index);
-            })
-            .always(function() {
+            },
+            complete: function() {
                 scheduleNextUpdate(index);
-            });
+            }
+        });
     }
     
     function startSquareUpdates() {
