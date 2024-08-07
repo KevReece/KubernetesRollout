@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dashboard.Controllers;
@@ -14,6 +13,11 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        var colourUrl = Environment.GetEnvironmentVariable("COLOUR_URL");
+        if (string.IsNullOrEmpty(colourUrl))
+        {
+            throw new Exception("COLOUR_URL environment variable not set");
+        }
+        return View(new {ColourUrl = colourUrl});
     }
 }

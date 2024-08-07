@@ -15,3 +15,6 @@ spec:
       containers:
       - name: dashboard
         image: kevreece/rolloutdashboard:v1.0.0
+        env:
+        - name: COLOUR_URL
+          value: "http://127.0.0.1:62992"

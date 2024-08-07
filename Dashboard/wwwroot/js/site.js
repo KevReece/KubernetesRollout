@@ -1,7 +1,10 @@
 ﻿$(document).ready(function() {
     let nSquares = 64;
-    let colourEndpoint = 'http://localhost:49264';
     let pendingResponseColour = 'black'
+
+    function getColourUrl(){
+        return document.getElementById('ColourUrl').value;
+    }
 
     function parseSquareColour(colourText) {
         let responseColours = ['green', 'blue'];
@@ -27,7 +30,7 @@
     function updateSquare(index) {
         setSquareColour(index, pendingResponseColour);
         return $.ajax({
-            url: colourEndpoint, 
+            url: getColourUrl(), 
             cache: false, 
             success: function(response) {
                 console.log('square' + index + ', response=' + response);
