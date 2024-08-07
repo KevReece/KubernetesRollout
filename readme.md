@@ -20,6 +20,8 @@ For local:
 Build
 ===
 
+From local:
+
 1. Build dashboard image: `docker build -t kevreece/rolloutdashboard:v1.0.0 Dashboard`
 1. Push to docker: `docker push kevreece/rolloutdashboard:v1.0.0`
 1. Build colour image: `docker build -t kevreece/colour:blue Colour`
@@ -27,6 +29,8 @@ Build
 1. Edit the colour/index.html content to "green"
 1. Rebuild the colour image: `docker build -t kevreece/colour:green Colour`
 1. Push to docker: `docker push kevreece/colour:green`
+
+From Github: automatic on `main` branch
 
 Deploy
 ===

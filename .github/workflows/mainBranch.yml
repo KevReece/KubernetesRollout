@@ -1,0 +1,38 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to Docker Hub
+      run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Build and push dashboard image
+      run: |
+        docker build -t kevreece/rolloutdashboard:v1.0.0 Dashboard
+        docker push kevreece/rolloutdashboard:v1.0.0
+
+    - name: Build and push colour image (blue)
+      run: |
+        docker build -t kevreece/colour:blue Colour
+        docker push kevreece/colour:blue
+
+    - name: Edit colour/index.html to green
+      run: |
+        echo "green" > Colour/index.html
+
+    - name: Build and push colour image (green)
+      run: |
+        docker build -t kevreece/colour:green Colour
+        docker push kevreece/colour:green
