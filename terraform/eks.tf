@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+    bucket         = "terraform-statefile"
+    key            = "terraform/terraform.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "terraform-lock"
+  }
+}
+
 provider "aws" {
   region = "eu-central-1"
 }
