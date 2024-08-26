@@ -8,6 +8,10 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: eu-central-1
+      EKS_CLUSTER_NAME: eks-cluster
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -36,3 +40,36 @@ jobs:
       run: |
         docker build -t kevreece/colour:green Colour
         docker push kevreece/colour:green
+
+    - name: 'Setup Terraform'
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.9.4
+
+    - name: 'Configure AWS credentials'
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: 'Terraform Init'
+      run: terraform -chdir=terraform init
+
+    - name: 'Terraform Plan'
+      run: terraform -chdir=terraform plan
+
+    - name: 'Terraform Apply'
+      run: terraform -chdir=terraform apply -auto-approve
+
+    - name: Setup kubectl
+      uses: actions-hub/kubectl@v1
+
+    - name: Configure kubectl
+      run: aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}
+
+    - name: Deploy kubernetes CustomResourceDefinitions
+      run: kubectl apply -k k8s-manifests/argo-rollouts
+
+    - name: Deploy Argo CD
+      run: kubectl apply -k k8s-manifests/overlays/aws -n argocd

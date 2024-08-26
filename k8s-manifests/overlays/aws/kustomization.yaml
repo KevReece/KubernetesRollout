@@ -3,7 +3,21 @@ kind: Kustomization
 resources:
 - ../../base
 patches:
-- path: service-patch.yaml
+- path: colour-service-patch.yaml
   target:
     kind: Service
     name: colour
+- path: dashboard-service-patch.yaml
+  target:
+    kind: Service
+    name: dashboard
+- path: argocd-server-service-patch.yaml
+  target:
+    kind: Service
+    name: argocd-server
+    namespace: argocd
+- path: argocd-application-patch.yaml
+  target:
+    kind: Application
+    name: kubernetes-rollout
+    namespace: argocd
