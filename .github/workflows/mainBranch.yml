@@ -62,11 +62,11 @@ jobs:
     - name: 'Terraform Apply'
       run: terraform -chdir=terraform apply -auto-approve
 
-    - name: Setup kubectl
-      uses: actions-hub/kubectl@v1.31.0
-
     - name: Configure kubectl
       run: aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}
+
+    - name: Setup kubectl from kube config
+      uses: actions-hub/kubectl@v1.31.0
 
     - name: Deploy kubernetes CustomResourceDefinitions
       run: kubectl apply -k k8s-manifests/argo-rollouts
