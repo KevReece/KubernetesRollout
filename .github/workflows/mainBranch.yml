@@ -53,6 +53,15 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: 'Terraform Init prerequisites'
+      run: terraform -chdir=terraform-prerequisites init
+
+    - name: 'Terraform Plan prerequisites'
+      run: terraform -chdir=terraform-prerequisites plan
+
+    - name: 'Terraform Apply prerequisites'
+      run: terraform -chdir=terraform-prerequisites apply -auto-approve
+
     - name: 'Terraform Init'
       run: terraform -chdir=terraform init
 
