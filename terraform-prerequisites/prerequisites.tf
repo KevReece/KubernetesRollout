@@ -4,14 +4,14 @@ provider "aws" {
 
 data "aws_s3_bucket" "existing_state_bucket" {
   bucket = "terraform-statefile"
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "terraform-statefile"
-
-  versioning {
-    enabled = true
-  }
 
   lifecycle {
     prevent_destroy = true
@@ -25,8 +25,20 @@ resource "aws_s3_bucket" "terraform_state" {
   count = length([for b in data.aws_s3_bucket.existing_state_bucket: b.id]) == 0 ? 1 : 0
 }
 
+resource "aws_s3_bucket_versioning" "terraform_state_versioning" {
+  bucket = aws_s3_bucket.terraform_state.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 data "aws_dynamodb_table" "existing_lock_table" {
   name = "terraform-lock"
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {
