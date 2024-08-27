@@ -53,13 +53,23 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: Check if prerequisite S3 bucket already exists
+      id: check-infra
+      run: |
+        if aws s3api head-bucket --bucket terraform-statefile 2>/dev/null; then
+          echo "prerequisite_s3_exists=true"
+        fi
+
     - name: 'Terraform Init prerequisites'
+      if: env.prerequisite_s3_exists != 'true'
       run: terraform -chdir=terraform-prerequisites init
 
     - name: 'Terraform Plan prerequisites'
+      if: env.prerequisite_s3_exists != 'true'
       run: terraform -chdir=terraform-prerequisites plan
 
     - name: 'Terraform Apply prerequisites'
+      if: env.prerequisite_s3_exists != 'true'
       run: terraform -chdir=terraform-prerequisites apply -auto-approve
 
     - name: 'Terraform Init'
