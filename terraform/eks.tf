@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state"
+    bucket         = "kevreece-kubernetes-rollout-terraform-state"
     key            = "terraform/terraform.tfstate"
     region         = "eu-central-1"
     dynamodb_table = "terraform-lock"
