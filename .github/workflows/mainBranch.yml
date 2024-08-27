@@ -58,19 +58,21 @@ jobs:
       id: check-infra
       run: |
         if aws s3api head-bucket --bucket ${{ env.AWS_TERRAFORM_STATE_BUCKET }} 2>/dev/null; then
-          echo "prerequisite_s3_exists=true"
+          echo "prerequisite_s3_exists=true" >> $GITHUB_ENV
+        else
+          echo "prerequisite_s3_exists=false" >> $GITHUB_ENV
         fi
 
     - name: 'Terraform Init prerequisites'
-      if: env.prerequisite_s3_exists != 'true'
+      if: env.prerequisite_s3_exists == 'false'
       run: terraform -chdir=terraform-prerequisites init
 
     - name: 'Terraform Plan prerequisites'
-      if: env.prerequisite_s3_exists != 'true'
+      if: env.prerequisite_s3_exists == 'false'
       run: terraform -chdir=terraform-prerequisites plan
 
     - name: 'Terraform Apply prerequisites'
-      if: env.prerequisite_s3_exists != 'true'
+      if: env.prerequisite_s3_exists == 'false'
       run: terraform -chdir=terraform-prerequisites apply -auto-approve
 
     - name: 'Terraform Init'
