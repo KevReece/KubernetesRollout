@@ -90,6 +90,7 @@ jobs:
         kube_config=$(aws eks --region ${{ env.AWS_REGION }} update-kubeconfig \
           --name ${{ env.EKS_CLUSTER_NAME }} \
           --dry-run)
+        echo $kube_config
         echo "KUBE_CONFIG=$(echo $kube_config | base64 -w 0)" >> $GITHUB_ENV
 
     - name: Setup kubectl from kube config
