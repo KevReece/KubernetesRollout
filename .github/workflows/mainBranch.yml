@@ -87,12 +87,10 @@ jobs:
     - name: Configure kubectl
       id: configure-kubectl
       run: |
-        kube_config=$(aws eks --region ${{ env.AWS_REGION }} update-kubeconfig \
-          --name ${{ env.EKS_CLUSTER_NAME }} \
-          --dry-run \
-          --output json)
-        echo $kube_config
-        echo "KUBE_CONFIG=$(echo $kube_config | base64 -w 0)" >> $GITHUB_ENV
+        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
+        cat ~/.kube/config | base64
+        echo "$(cat ~/.kube/config)"
+        echo "KUBE_CONFIG=$(cat ~/.kube/config | base64 -w 0)" >> $GITHUB_ENV
 
     - name: Setup kubectl from kube config
       uses: actions-hub/kubectl@v1.31.0
