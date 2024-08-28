@@ -88,15 +88,15 @@ jobs:
       id: configure-kubectl
       run: |
         aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-        cat ~/.kube/config | base64
         echo "$(cat ~/.kube/config)"
         echo "KUBE_CONFIG=$(cat ~/.kube/config | base64 -w 0)" >> $GITHUB_ENV
 
-    - name: Setup kubectl from kube config
-      uses: actions-hub/kubectl@v1.31.0
-
     - name: Deploy kubernetes CustomResourceDefinitions
-      run: kubectl apply -k k8s-manifests/argo-rollouts
+      uses: actions-hub/kubectl@v1.31.0
+      with:
+        args: apply -k k8s-manifests/argo-rollouts
 
     - name: Deploy Argo CD
-      run: kubectl apply -k k8s-manifests/overlays/aws -n argocd
+      uses: actions-hub/kubectl@v1.31.0
+      with:
+        args: apply -k k8s-manifests/overlays/aws -n argocd
