@@ -89,7 +89,8 @@ jobs:
       run: |
         kube_config=$(aws eks --region ${{ env.AWS_REGION }} update-kubeconfig \
           --name ${{ env.EKS_CLUSTER_NAME }} \
-          --dry-run)
+          --dry-run
+          --output json)
         echo $kube_config
         echo "KUBE_CONFIG=$(echo $kube_config | base64 -w 0)" >> $GITHUB_ENV
 
